@@ -17,6 +17,24 @@ export default class App extends Component {
     number: "",
   };
 
+  componentDidMount() {
+    const contactsFromLocalStorage = localStorage.getItem("contactList");
+    const parsedContacts = JSON.parse(contactsFromLocalStorage);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevStateContacts = prevState.contacts;
+    const nextStayContacts = this.state.contacts;
+
+    if (prevStateContacts !== nextStayContacts) {
+      localStorage.setItem("contactList", JSON.stringify(nextStayContacts));
+    }
+  }
+
   handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -60,8 +78,8 @@ export default class App extends Component {
       <div
         style={{
           display: "flex",
-        flexDirection: "column",
-        marginLeft: 10,
+          flexDirection: "column",
+          marginLeft: 10,
           alignItems: "left",
           fontSize: 20,
           color: "#010101",
